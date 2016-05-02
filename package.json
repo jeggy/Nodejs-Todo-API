@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-todo-api",
+  "version": "1.0.0",
+  "description": "A todo application api",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeggy/Nodejs-Todo-API.git"
+  },
+  "keywords": [
+    "nodejs",
+    "todo",
+    "api",
+    "mongodb",
+    "school",
+    "class",
+    "oauth2"
+  ],
+  "author": "Jogvan Olsen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeggy/Nodejs-Todo-API/issues"
+  },
+  "homepage": "https://github.com/jeggy/Nodejs-Todo-API#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "oauth2-server": "^2.4.1"
+  }
+}
