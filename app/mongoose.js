@@ -19,9 +19,7 @@ mongoose.connect(require('../config/database.js').mongoose.uri);
 
 // Schemas:
 var Schema = mongoose.Schema;
-var NoteModel = require('./models/note')(Schema);
-var UserModel = require('./models/user')(Schema);
 
-module.exports.Note = mongoose.model('Note', NoteModel);
-module.exports.User = mongoose.model('User', UserModel);
+module.exports.Note = mongoose.model('Note', require('./models/note')(Schema));
+module.exports.User = mongoose.model('User', require('./models/user')(Schema));
 
