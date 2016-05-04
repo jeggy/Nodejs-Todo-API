@@ -15,14 +15,16 @@ module.exports = function(app){
     });
 
 
-    // create a new user account (POST http://localhost:8080/api/signup)
-    app.post('/signup', function(req, res) {
-        if (!req.body.name || !req.body.password) {
-            res.json({success: false, msg: 'Please pass name and password.'});
+
+    app.post('/register', function(req, res) {
+        if (!req.body.username || !req.body.password) {
+            res.json({success: false, msg: 'Username and/or password is missing.'});
         } else {
             var newUser = new User({
-                name: req.body.name,
-                password: req.body.password
+                username: req.body.username,
+                password: req.body.password,
+                fullname: req.body.fullname,
+                age: req.body.age
             });
             // save the user
             newUser.save(function(err) {
@@ -34,10 +36,10 @@ module.exports = function(app){
         }
     });
 
-    // route to authenticate a user (POST http://localhost:8080/api/authenticate)
+
     app.post('/authenticate', function(req, res) {
         User.findOne({
-            name: req.body.name
+            username: req.body.username
         }, function(err, user) {
             if (err) throw err;
 
@@ -60,32 +62,19 @@ module.exports = function(app){
     });
 
 
-    getToken = function (headers) {
-        if (headers && headers.authorization) {
-            var parted = headers.authorization.split(' ');
-            if (parted.length === 2) {
-                return parted[1];
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    };
-
     app.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
         var token = getToken(req.headers);
         if (token) {
             var decoded = jwt.decode(token, config.secret);
             User.findOne({
-                name: decoded.name
+                username : decoded.username
             }, function(err, user) {
                 if (err) throw err;
 
                 if (!user) {
                     return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
                 } else {
-                    res.json({success: true, msg: 'Welcome in the member area ' + user.name + '!'});
+                    res.json({success: true, msg: 'Welcome in the member area ' + user.fullname + '!'});
                 }
             });
         } else {
@@ -94,4 +83,16 @@ module.exports = function(app){
     });
 };
 
+function getToken(headers) {
+    if (headers && headers.authorization) {
+        var parted = headers.authorization.split(' ');
+        if (parted.length === 2) {
+            return parted[1];
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
 
