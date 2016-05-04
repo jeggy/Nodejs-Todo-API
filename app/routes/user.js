@@ -5,7 +5,13 @@
 var User = require('../mongoose').User;
 
 module.exports = function(app) {
-
+    
+    app.get('/api/user', function (req, res) {
+        User.find({}, function (err, users) {
+            res.send(users);
+        });
+    });
+    
     app.post('/api/user', function(req, res) {
         var newUser = new User({
             username: req.body.username,

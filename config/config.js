@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    "port" : 3000,
+    "secret" : "aergreŋ®€ºDF¤",
     "mongoose": {
         "uri": "mongodb://localhost:27017/todo"
     }

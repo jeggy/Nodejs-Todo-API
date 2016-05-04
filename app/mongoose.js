@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 
-mongoose.connect(require('../config/database.js').mongoose.uri);
+mongoose.connect(require('../config/config.js').mongoose.uri);
 
 /*
  * Just some comments about mongoose:
@@ -18,8 +18,11 @@ mongoose.connect(require('../config/database.js').mongoose.uri);
  */
 
 // Schemas:
-var Schema = mongoose.Schema;
-
-module.exports.Note = mongoose.model('Note', require('./models/note')(Schema));
-module.exports.User = mongoose.model('User', require('./models/user')(Schema));
+// var Schema = mongoose.Schema;
+//
+// module.exports.Note = mongoose.model('Note', require('./models/note')(Schema));
+// module.exports.User = mongoose.model('User', require('./models/user')(Schema));
+// module.exports.AccessToken = mongoose.model('AccessToken', require('./models/AccessToken')(Schema));
+// module.exports.RefreshToken = mongoose.model('RefreshToken', require('./models/RefreshToken')(Schema));
+// module.exports.Client = mongoose.model('Client', require('./models/Client')(Schema));
 
