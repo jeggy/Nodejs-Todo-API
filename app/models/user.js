@@ -16,8 +16,7 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
-    fullname: String,
-    age: Number
+    fullname: String
 });
 
 UserSchema.pre('save', function (next) {

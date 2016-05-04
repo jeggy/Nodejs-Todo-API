@@ -9,11 +9,11 @@ var config = require('../config/config');
 module.exports = function(app){
 
     require('./routes/user')(app);
+    require('./routes/todo')(app);
 
     app.get('/', function (req, res) {
         res.send("Hello World!");
     });
-
 
 
     app.post('/register', function(req, res) {
@@ -50,7 +50,7 @@ module.exports = function(app){
                 user.comparePassword(req.body.password, function (err, isMatch) {
                     if (isMatch && !err) {
                         // if user is found and password is right create a token
-                        var token = jwt.encode(user, config.secret); // TODO: Secret
+                        var token = jwt.encode(user, config.secret);
                         // return the information including token as JSON
                         res.json({success: true, token: 'JWT ' + token});
                     } else {
@@ -63,36 +63,20 @@ module.exports = function(app){
 
 
     app.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
-        var token = getToken(req.headers);
+        var token = require('../libs/get-token')(req.headers);
         if (token) {
-            var decoded = jwt.decode(token, config.secret);
-            User.findOne({
-                username : decoded.username
-            }, function(err, user) {
-                if (err) throw err;
+            var user = jwt.decode(token, config.secret);
 
-                if (!user) {
-                    return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
-                } else {
-                    res.json({success: true, msg: 'Welcome in the member area ' + user.fullname + '!'});
-                }
-            });
+            if (!user) {
+                return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
+            } else {
+                res.json({success: true, msg: 'Welcome in the member area ' + user.fullname + '!'});
+            }
         } else {
             return res.status(403).send({success: false, msg: 'No token provided.'});
         }
     });
 };
 
-function getToken(headers) {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split(' ');
-        if (parted.length === 2) {
-            return parted[1];
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
-};
+
 
