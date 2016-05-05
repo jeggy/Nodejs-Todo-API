@@ -18,15 +18,32 @@ var TodoSchema = new Schema({
         required: true,
         default: Date.now()
     },
-    user: {
+    archived: {
+        type: Boolean,
+        default: false
+    },
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    entries: {
-        type: [Entry]
+    root: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Todo',
+        default: null
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Todo',
+        default: null
     }
 });
+
+TodoSchema.methods.getTodos = function (owner, cb) {
+    TodoSchema.find({owner: owner}, function (err, todos) {
+        console.log(todos);
+    });
+};
 
 module.exports = mongoose.model('Todo', TodoSchema);
 

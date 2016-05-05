@@ -26,6 +26,8 @@ var config = require('../../config/config');
 
 var Todo = require('../models/todo');
 
+// tree module: https://github.com/franck34/mongoose-tree
+
 module.exports = function(app) {
 
     function check(req, res, cb){
@@ -48,16 +50,23 @@ module.exports = function(app) {
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
         check(req, res, function (err, user) {
             if(!err){
-                Todo.find({user: user._id}, function (err, data) {
-                    if(err){
-                        // TODO: error!
-                    }else {
-                        res.json(data);
-                    }
+
+                Todo.find({owner: user._id, root: null}, function (err, data) {
+                    console.log(data);
                 });
+                //     if(err){
+                //         // TODO: error!
+                //     }else {
+                //         res.json(data);
+                //     }
+                // });
             }
         });
     });
+
+    function sortTodos(node) {
+        
+    }
 
     app.get('/api/todo/:id', passport.authenticate('jwt', { session: false}), function (req, res){
         check(req, res, function (err, user) {
@@ -80,12 +89,17 @@ module.exports = function(app) {
                 //
                 var title = req.body.title;
                 var date = req.body.date;
+                var root = req.body.root;
+                var parent = req.body.parent;
+                var child = req.body.child;
 
                 var newTodo = new Todo({
                     title: title,
                     date: date,
-                    user: user,
-                    entries: []
+                    owner: user,
+                    root: root,
+                    parent: parent,
+                    child: child
                 });
 
                 newTodo.save(function (err) {
