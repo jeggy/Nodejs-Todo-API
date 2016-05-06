@@ -1,3 +1,8 @@
+# generated apidocs
+# npm install -g apidoc
+# apidoc -i app/ -o apidoc/ -t apiTemplate/
+apidoc/*
+
 # Webstorm
 .idea*
 
