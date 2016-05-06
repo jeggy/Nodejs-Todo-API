@@ -36,12 +36,64 @@ var TodoSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Todo',
         default: null
+    },
+    child: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Todo',
+        default: []
     }
 });
 
-TodoSchema.methods.getTodos = function (owner, cb) {
-    TodoSchema.find({owner: owner}, function (err, todos) {
-        console.log(todos);
+TodoSchema.pre('save', function (next) {
+    console.log(this);
+    var self = this;
+
+    if(!self.isNew || !self.isModified('parent')) {
+        next();
+    }else if(self.parent){
+        mongoose.models["Todo"].findOne({ _id : mongoose.Types.ObjectId(self.parent) }, function(err, doc) {
+            if(err){
+                next(err);
+            }
+            doc.child.push(self._id);
+
+            doc.markModified('child');
+            doc.save(function (err, doc) {
+                if(err){
+                    next(err);
+                }
+                next();
+            });
+        });
+    }else{
+        next();
+    }
+});
+
+// TodoSchema.method
+
+TodoSchema.statics.fetchTodos = function(user, callback) {
+
+    mongoose.models["Todo"].find({ owner: user._id }, function(err, docs) {
+        if(err){
+            callback(err, null);
+        }
+        var map = {};
+        var roots = [];
+        docs.forEach(function (todo) {
+            map[todo._id] = todo.toObject();
+        });
+
+        docs.forEach(function (todo) {
+            if(todo.parent){
+                var parentChildsArray = map[todo.parent].child;
+                parentChildsArray.splice(1, parentChildsArray.indexOf(todo), map[todo._id]);
+            }else if(todo.root == null){
+                roots.push(map[todo._id]);
+            }
+        });
+
+        callback(null, roots);
     });
 };
 

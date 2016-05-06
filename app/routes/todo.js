@@ -17,8 +17,8 @@
  * POST /api/entry/:id -> Body -> archived: boolean
  * DELETE /api/entry/
 
- localhost:3000/api/entry/25
- body: archived = true
+ * localhost:3000/api/entry/25
+ * body: archived = true
  */
 var jwt = require('jwt-simple');
 var passport = require('passport');

@@ -18,5 +18,14 @@ require('./libs/passport')(passport);
 
 require('./app/routes')(app);
 
+var Todo =require('./app/models/todo');
+// new Todo({
+//     title: "Super Child!",
+//     owner: "5729fec3b2102fdd1dd53a32",
+//     root: "572c5f17e2cce1e442ff1c9c",
+//     parent: "572c5fad5993c09c451c31a2"
+// }).save();
+
+// Todo.fetchTodos();
 
 app.listen(3000);
