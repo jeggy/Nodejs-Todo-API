@@ -53,7 +53,7 @@ module.exports = function(app) {
      * @apiName GetTodos
      * @apiGroup Todo
      *
-     * @apiHeader (Todo) {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization value
      *
      * @apiSuccess {Object[]} Todo[] all todos and todos childs.
      *
