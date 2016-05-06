@@ -60,10 +60,6 @@ module.exports = function(app) {
         });
     });
 
-    function sortTodos(node) {
-        
-    }
-
     app.get('/api/todo/:id', passport.authenticate('jwt', { session: false}), function (req, res){
         check(req, res, function (err, user) {
             if(!err){

@@ -68,6 +68,23 @@ TodoSchema.pre('save', function (next) {
     }
 });
 
+TodoSchema.pre('remove', function (next) {
+    var self = this;
+
+    mongoose.models["Todo"].fetchTodos({_id : self.owner}, function(err, roots){
+        if(err==null) {
+            roots.forEach(function (root) {
+                if(self.root == null){
+                    if(root._id == self._id){
+                        
+                    }
+                }
+            });
+        }
+    });
+
+});
+
 // TodoSchema.method
 
 TodoSchema.statics.fetchTodos = function(user, callback) {
