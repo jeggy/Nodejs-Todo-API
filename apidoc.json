@@ -1,0 +1,7 @@
+{
+  "name": "Todo",
+  "version": "1.0.0",
+  "description": "A Todo Restful API",
+  "title": "Todo API Docs",
+  "url" : "localhost:3000"
+}

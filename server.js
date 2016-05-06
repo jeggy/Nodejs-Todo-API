@@ -13,6 +13,10 @@ app.use(bodyParser.urlencoded({extended: false})); // JSON parsing
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+app.use('/', express.static(__dirname + '/apidoc/'));
+
 require('./libs/passport')(passport);
 
 
@@ -36,15 +40,15 @@ var Todo =require('./app/models/todo');
 //     })
 // });
 
-Todo.findOne({_id: "572ca64d9968202f179b2cee"}).populate('child').exec(function (err, doc) {
-    // console.log(doc);
-
-    if(doc != null){
-        doc.remove(function (err, removed) {
-            console.log(" Removed!");
-        });
-    }
-});
+// Todo.findOne({_id: "572ca64d9968202f179b2cee"}).populate('child').exec(function (err, doc) {
+//     // console.log(doc);
+//
+//     if(doc != null){
+//         doc.remove(function (err, removed) {
+//             console.log(" Removed!");
+//         });
+//     }
+// });
 
 // Todo.fetchTodos();
 

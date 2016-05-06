@@ -47,6 +47,90 @@ module.exports = function(app) {
         }
     }
 
+    /**
+     * @api {get} /api/todo Get's all todo's from logged in user.
+     * @apiVersion 1.0.0
+     * @apiName GetTodos
+     * @apiGroup Todo
+     *
+     * @apiHeader (Todo) {String} authorization Authorization value
+     *
+     * @apiSuccess {Object[]} Todo[] all todos and todos childs.
+     *
+     * @apiSuccessExample Success-Response:
+     *     {
+     *       [
+     *         {
+     *           "_id": "572c5f17e2cce1e442ff1c9c",
+     *           "title": "Root!",
+     *           "owner": "5729fec3b2102fdd1dd53a32",
+     *           "__v": 2,
+     *           "child": [
+     *             {
+     *               "_id": "572c5f930b63dee544e1eabf",
+     *               "title": "Parent2!",
+     *               "owner": "5729fec3b2102fdd1dd53a32",
+     *               "__v": 2,
+     *               "child": [
+     *                 {
+     *                   "_id": "572c5fad5993c09c451c31a2",
+     *                   "title": "Child4!",
+     *                   "owner": "5729fec3b2102fdd1dd53a32",
+     *                   "__v": 1,
+     *                   "child": [
+     *                     {
+     *                       "_id": "572c5fbb841f2a684698de1e",
+     *                       "title": "Super Child!",
+     *                       "owner": "5729fec3b2102fdd1dd53a32",
+     *                       "__v": 0,
+     *                       "child": [],
+     *                       "parent": "572c5fad5993c09c451c31a2",
+     *                       "root": "572c5f17e2cce1e442ff1c9c",
+     *                       "archived": false,
+     *                       "date": "2016-05-06T09:11:23.704Z"
+     *                     }
+     *                   ],
+     *                   "parent": "572c5f930b63dee544e1eabf",
+     *                   "root": "572c5f17e2cce1e442ff1c9c",
+     *                   "archived": false,
+     *                   "date": "2016-05-06T09:11:09.090Z"
+     *                 }
+     *               ],
+     *               "parent": "572c5f17e2cce1e442ff1c9c",
+     *               "root": "572c5f17e2cce1e442ff1c9c",
+     *               "archived": false,
+     *               "date": "2016-05-06T09:10:43.367Z"
+     *             }
+     *           ],
+     *           "parent": null,
+     *           "root": null,
+     *           "archived": false,
+     *           "date": "2016-05-06T09:08:39.732Z"
+     *         },
+     *         {
+     *           "_id": "572c760f880b964e7ac06085",
+     *           "title": "Root2!",
+     *           "owner": "5729fec3b2102fdd1dd53a32",
+     *           "__v": 1,
+     *           "child": [],
+     *           "parent": null,
+     *           "root": null,
+     *           "archived": false,
+     *           "date": "2016-05-06T10:46:39.187Z"
+     *         }
+     *       ]
+     *     }
+     *
+     * @apiError MissingToken No token provided.
+     * @apiError WrongToken Token not matched on server.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "todo": "Write better error example."
+     *       "error": "UserNotFound"
+     *     }
+     */
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
         check(req, res, function (err, user) {
             if(!err){
