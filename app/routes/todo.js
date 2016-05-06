@@ -51,15 +51,11 @@ module.exports = function(app) {
         check(req, res, function (err, user) {
             if(!err){
 
-                Todo.find({owner: user._id, root: null}, function (err, data) {
-                    console.log(data);
+                Todo.fetchTodos(user, function (err, data) {
+                    if(!err){
+                        res.json(data);
+                    }
                 });
-                //     if(err){
-                //         // TODO: error!
-                //     }else {
-                //         res.json(data);
-                //     }
-                // });
             }
         });
     });

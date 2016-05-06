@@ -20,11 +20,21 @@ require('./app/routes')(app);
 
 var Todo =require('./app/models/todo');
 // new Todo({
-//     title: "Super Child!",
+//     title: "Child_root2!",
 //     owner: "5729fec3b2102fdd1dd53a32",
-//     root: "572c5f17e2cce1e442ff1c9c",
-//     parent: "572c5fad5993c09c451c31a2"
+//     root: "572c760f880b964e7ac06085",
+//     parent: "572c760f880b964e7ac06085"
 // }).save();
+
+var User = require('./app/models/user');
+User.findOne({_id: "5729fec3b2102fdd1dd53a32"}, function (err, doc) {
+
+    Todo.fetchTodos(doc, function (err, todos) {
+        todos.forEach(function (todo) {
+            console.log(todo.title);
+        });
+    })
+});
 
 // Todo.fetchTodos();
 

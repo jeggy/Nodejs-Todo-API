@@ -6,8 +6,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var User = require('./user');
-var Entry = require('./entry');
-
 var TodoSchema = new Schema({
     title: {
         type: String,
@@ -87,7 +85,8 @@ TodoSchema.statics.fetchTodos = function(user, callback) {
         docs.forEach(function (todo) {
             if(todo.parent){
                 var parentChildsArray = map[todo.parent].child;
-                parentChildsArray.splice(1, parentChildsArray.indexOf(todo), map[todo._id]);
+                parentChildsArray.splice(parentChildsArray.indexOf(todo)-1, 1);
+                parentChildsArray.push(map[todo._id]);
             }else if(todo.root == null){
                 roots.push(map[todo._id]);
             }
