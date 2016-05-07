@@ -14,7 +14,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
+// Set the documentation to be on '/' (Index)
 app.use('/', express.static(__dirname + '/apidoc/'));
 
 require('./libs/passport')(passport);

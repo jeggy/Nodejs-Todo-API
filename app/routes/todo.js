@@ -3,6 +3,8 @@
  */
 
 /*
+ * tree module github: https://github.com/franck34/mongoose-tree
+ *
  * GET /api/todo/
  * GET /api/todo/:id
  * POST /api/todo/
@@ -25,8 +27,6 @@ var passport = require('passport');
 var config = require('../../config/config');
 
 var Todo = require('../models/todo');
-
-// tree module: https://github.com/franck34/mongoose-tree
 
 module.exports = function(app) {
 

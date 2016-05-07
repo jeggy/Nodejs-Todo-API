@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 
+// TODO: No need for this file, but move the connection somewhere before deleting this file.
 mongoose.connect(require('../config/config.js').mongoose.uri);
 
 /*
