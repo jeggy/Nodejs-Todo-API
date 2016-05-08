@@ -2,10 +2,13 @@
  * Created by Jógvan on 02/05-2016 20:15.
  */
 
+// This file is not used any more.
+
 var mongoose = require('mongoose');
 
-// TODO: No need for this file, but move the connection somewhere before deleting this file.
 mongoose.connect(require('../config/config.js').mongoose.uri);
+
+console.log("Testing");
 
 /*
  * Just some comments about mongoose:

@@ -6,6 +6,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var mongoose = require('mongoose');
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: false})); // JSON parsing
@@ -13,13 +14,16 @@ app.use(bodyParser.urlencoded({extended: false})); // JSON parsing
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Mongo
+mongoose.connect(require('./config/config').mongoose.uri);
+
 
 // Set the documentation to be on '/' (Index)
 app.use('/', express.static(__dirname + '/apidoc/'));
 
 require('./libs/passport')(passport);
 
-
+// set routes
 require('./app/routes')(app);
 
 var Todo =require('./app/models/todo');
