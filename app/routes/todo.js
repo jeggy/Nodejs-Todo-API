@@ -22,30 +22,11 @@
  * localhost:3000/api/entry/25
  * body: archived = true
  */
-var jwt = require('jwt-simple');
 var passport = require('passport');
-var config = require('../../config/config');
 
 var Todo = require('../models/todo');
 
 module.exports = function(app) {
-
-    function check(req, res, cb){
-        var token = require('../../libs/get-token')(req.headers);
-        if (token) {
-            var user = jwt.decode(token, config.secret);
-            if (!user) {
-                cb(true, null);
-                return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
-            } else {
-                // Success
-                cb(null, user);
-            }
-        } else {
-            cb(true, null);
-            return res.status(403).send({success: false, msg: 'No token provided.'});
-        }
-    }
 
     /**
      * @api {get} /api/todo Get's all todo's from logged in user.
@@ -132,7 +113,7 @@ module.exports = function(app) {
      *     }
      */
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
-        check(req, res, function (err, user) {
+        require('../../libs/get-token').check(req, res, function (err, user) {
             if(!err){
 
                 Todo.fetchTodos(user, function (err, data) {
@@ -145,7 +126,7 @@ module.exports = function(app) {
     });
 
     app.get('/api/todo/:id', passport.authenticate('jwt', { session: false}), function (req, res){
-        check(req, res, function (err, user) {
+        require('../../libs/get-token').check(req, res, function (err, user) {
             if(!err){
                 Todo.findOne({user: user._id, _id: req.params.id}, function (err, data) {
                     if(err){
@@ -160,7 +141,7 @@ module.exports = function(app) {
     });
 
     app.post('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
-        check(req, res, function (err, user) {
+        require('../../libs/get-token').check(req, res, function (err, user) {
             if(!err){
                 //
                 var title = req.body.title;
@@ -190,7 +171,7 @@ module.exports = function(app) {
     });
 
     app.put('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
-        check(req, res, function (err, user) {
+        require('../../libs/get-token').check(req, res, function (err, user) {
             if(!err){
                 var id = req.body.id;
 
@@ -210,7 +191,7 @@ module.exports = function(app) {
     });
 
     app.delete('/api/todo/:id', passport.authenticate('jwt', { session: false}), function(req, res){
-        check(req, res, function (err, user) {
+        require('../../libs/get-token').check(req, res, function (err, user) {
             if(!err){
                 Todo.remove({user: user._id, _id: req.params.id}, function (err, data) {
                     res.send(data);
