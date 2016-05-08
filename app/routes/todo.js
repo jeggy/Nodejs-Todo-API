@@ -112,7 +112,6 @@ module.exports = function(app) {
      *       "error": "UserNotFound"
      *     }
      */
-    // Done
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
             if(!err){
@@ -125,7 +124,6 @@ module.exports = function(app) {
         });
     });
     
-    // Done
     app.post('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
@@ -154,7 +152,6 @@ module.exports = function(app) {
         });
     });
 
-    // Done
     app.put('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
@@ -179,7 +176,6 @@ module.exports = function(app) {
         })
     });
 
-    // Done
     app.delete('/api/todo/:id', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
