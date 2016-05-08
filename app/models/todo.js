@@ -43,7 +43,6 @@ var TodoSchema = new Schema({
 });
 
 TodoSchema.pre('save', function (next) {
-    console.log(this);
     var self = this;
 
     if(!self.isNew || !self.isModified('parent')) {
@@ -68,22 +67,48 @@ TodoSchema.pre('save', function (next) {
     }
 });
 
-TodoSchema.pre('remove', function (next) {
-    var self = this;
+TodoSchema.statics.removeTodo = function(user, id, callback){
 
-    mongoose.models["Todo"].fetchTodos({_id : self.owner}, function(err, roots){
+    mongoose.models["Todo"].fetchTodos(user, function(err, roots){
         if(err==null) {
+
+            var stop = false;
+            var search = function(current){
+                if(current._id == id && stop == false){
+                    findChildsIDs(current);
+                    stop = true;
+                }else {
+                    current.child.forEach(function (child) {
+                        search(child)
+                    });
+                }
+            };
+
+            var childs = [];
+            var findChildsIDs = function (current) {
+                childs.push(current._id);
+                current.child.forEach(function (child) {
+                    findChildsIDs(child);
+                });
+            };
+
             roots.forEach(function (root) {
-                if(self.root == null){
-                    if(root._id == self._id){
-                        
-                    }
+                search(root);
+            });
+
+            console.log(JSON.stringify(childs));
+
+            mongoose.models["Todo"].remove({_id: {$in: childs}}, function (err, effected) {
+                if(err){
+                    callback(err, null);
+                }else{
+                    callback(null, effected);
                 }
             });
         }
     });
 
-});
+};
 
 // TodoSchema.method
 

@@ -22,14 +22,16 @@ module.exports.check = function (req, res, cb){
     if (token) {
         var user = jwt.decode(token, config.secret);
         if (!user) {
-            cb(true, null);
-            return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
+            var errmsg = {success: false, msg: 'Authentication failed. User not found.'};
+            cb(errmsg, null);
+            return res.status(401).send(errmsg);
         } else {
             // Success
             cb(null, user);
         }
     } else {
-        cb(true, null);
-        return res.status(403).send({success: false, msg: 'No token provided.'});
+        errmsg = {success: false, msg: 'No token provided.'};
+        cb(errmsg, null);
+        return res.status(401).send(errmsg);
     }
 };

@@ -5,7 +5,7 @@
 var jwt = require('jwt-simple');
 var passport = require('passport');
 var config = require('../../config/config');
-
+var tokenCheck = require('../../libs/get-token').check;
 var User = require('../models/user');
 
 module.exports = function(app) {
@@ -29,7 +29,6 @@ module.exports = function(app) {
             });
         }
     });
-
 
     app.post('/api/user/login', function(req, res) {
         // TODO: Something is not working. Debug ;)
@@ -59,9 +58,11 @@ module.exports = function(app) {
     });
 
     // show user info
-    app.get('/api/user', function (req, res) {
-        User.find({}, function (err, users) {
-            res.send(users);
+    app.get('/api/user', passport.authenticate('jwt', { session: false}), function (req, res) {
+        tokenCheck(req, res, function (err, user) {
+            User.findOne({_id: user._id}, {password: false, __v: false}, function (err, user) {
+                res.send(user);
+            });
         });
     });
 

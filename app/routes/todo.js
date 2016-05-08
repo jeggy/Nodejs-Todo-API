@@ -23,7 +23,7 @@
  * body: archived = true
  */
 var passport = require('passport');
-
+var tokenCheck = require('../../libs/get-token').check;
 var Todo = require('../models/todo');
 
 module.exports = function(app) {
@@ -112,10 +112,10 @@ module.exports = function(app) {
      *       "error": "UserNotFound"
      *     }
      */
+    // Done
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
-        require('../../libs/get-token').check(req, res, function (err, user) {
+        tokenCheck(req, res, function (err, user) {
             if(!err){
-
                 Todo.fetchTodos(user, function (err, data) {
                     if(!err){
                         res.json(data);
@@ -124,54 +124,39 @@ module.exports = function(app) {
             }
         });
     });
-
-    app.get('/api/todo/:id', passport.authenticate('jwt', { session: false}), function (req, res){
-        require('../../libs/get-token').check(req, res, function (err, user) {
-            if(!err){
-                Todo.findOne({user: user._id, _id: req.params.id}, function (err, data) {
-                    if(err){
-                        // TODO: error!
-                    }else {
-                        // TODO: if null
-                        res.json(data);
-                    }
-                });
-            }
-        });
-    });
-
+    
+    // Done
     app.post('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
-        require('../../libs/get-token').check(req, res, function (err, user) {
+        tokenCheck(req, res, function (err, user) {
             if(!err){
                 //
                 var title = req.body.title;
                 var date = req.body.date;
                 var root = req.body.root;
                 var parent = req.body.parent;
-                var child = req.body.child;
 
                 var newTodo = new Todo({
                     title: title,
                     date: date,
                     owner: user,
                     root: root,
-                    parent: parent,
-                    child: child
+                    parent: parent
                 });
 
                 newTodo.save(function (err) {
                     if(err){
-                        res.send(err);
+                        res.status(400).send(err);
                     }else{
-                        res.json(newTodo);
+                        res.status(200).json(newTodo);
                     }
                 });
             }
         });
     });
 
+    // Done
     app.put('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
-        require('../../libs/get-token').check(req, res, function (err, user) {
+        tokenCheck(req, res, function (err, user) {
             if(!err){
                 var id = req.body.id;
 
@@ -183,18 +168,28 @@ module.exports = function(app) {
                     update.date = req.body.date;
                 }
 
-                Todo.update({_id: id}, {$set: update}, {multi: false}, function (err, effected) {
-                    res.send(effected);
+                Todo.update({_id: id, owner: user}, {$set: update}, {multi: false}, function (err, effected) {
+                    if(effected.n == 1) {
+                        res.send(effected);
+                    }else{
+                        res.status(401).send({success: false, msg: 'Either this Todo doesn\'t exists or you don\'t have permission to update'});
+                    }
                 });
             }
         })
     });
 
+    // Done
     app.delete('/api/todo/:id', passport.authenticate('jwt', { session: false}), function(req, res){
-        require('../../libs/get-token').check(req, res, function (err, user) {
+        tokenCheck(req, res, function (err, user) {
             if(!err){
-                Todo.remove({user: user._id, _id: req.params.id}, function (err, data) {
-                    res.send(data);
+                console.log(req.params.id);
+                Todo.removeTodo(user, req.params.id, function (err, effected) {
+                    if(err){
+                        res.status(500).send(err);
+                    }else{
+                        res.status(200).send(effected);
+                    }
                 });
             }
         })

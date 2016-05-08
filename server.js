@@ -28,31 +28,21 @@ require('./app/routes')(app);
 
 var Todo =require('./app/models/todo');
 // new Todo({
-//     title: "Root3!",
+//     title: "Child!",
 //     owner: "5729fec3b2102fdd1dd53a32",
-//     root: "572ca64d9968202f179b2cee",
-//     parent: "572ca64d9968202f179b2cee"
+//     root: "572f6033c60ff4c4143e793b",
+//     parent: "572f6033c60ff4c4143e793b"
 // }).save();
 
 // var User = require('./app/models/user');
-// User.findOne({_id: "5729fec3b2102fdd1dd53a32"}, function (err, doc) {
+// User.findOne({_id: "5729fec3b2102fdd1dd53a32"}, function (err, user) {
 //
-//     Todo.fetchTodos(doc, function (err, todos) {
-//         todos.forEach(function (todo) {
-//             console.log(todo.title);
-//         });
-//     })
+//     Todo.removeTest(user, "572f6033c60ff4c4143e793b", function (err, doc) {
+//         console.log(doc);
+//     });
 // });
 
-// Todo.findOne({_id: "572ca64d9968202f179b2cee"}).populate('child').exec(function (err, doc) {
-//     // console.log(doc);
-//
-//     if(doc != null){
-//         doc.remove(function (err, removed) {
-//             console.log(" Removed!");
-//         });
-//     }
-// });
+
 
 // Todo.fetchTodos();
 
