@@ -10,7 +10,7 @@ var Todo = require('../models/todo');
 module.exports = function(app) {
 
     /**
-     * @api {get} /api/todo Get's all todo's from logged in user.
+     * @api {get} /api/todo Get's all todo's
      * @apiVersion 1.0.0
      * @apiName GetTodos
      * @apiGroup Todo
@@ -86,12 +86,6 @@ module.exports = function(app) {
      * @apiError MissingToken No token provided.
      * @apiError WrongToken Token not matched on server.
      *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
-     *     {
-     *       "todo": "Write better error example."
-     *       "error": "UserNotFound"
-     *     }
      */
     app.get('/api/todo', passport.authenticate('jwt', { session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
