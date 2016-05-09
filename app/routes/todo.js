@@ -145,6 +145,9 @@ module.exports = function(app) {
                 if(req.body.date){
                     update.date = req.body.date;
                 }
+                if(req.body.archived){
+                    update.archived = req.body.archived;
+                }
 
                 Todo.update({_id: id, owner: user}, {$set: update}, {multi: false}, function (err, effected) {
                     if(effected.n == 1) {

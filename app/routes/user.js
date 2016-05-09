@@ -36,8 +36,10 @@ module.exports = function(app) {
             User.findOne({username: req.body.username}, function (err, user) {
                 if (err) throw err;
 
+                var userErrMsg = {success: false, msg: 'Authentication failed. Wrong Username or Password'};
+
                 if (!user) {
-                    res.send({success: false, msg: 'Authentication failed. User not found.'});
+                    res.send(userErrMsg);
                 } else {
                     // check if password matches
                     user.comparePassword(req.body.password, function (err, isMatch) {
@@ -47,7 +49,7 @@ module.exports = function(app) {
                             // return the information including token as JSON
                             res.json({success: true, token: 'JWT ' + token});
                         } else {
-                            res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+                            res.send(userErrMsg);
                         }
                     });
                 }
