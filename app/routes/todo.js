@@ -2,26 +2,7 @@
  * Created by Jógvan on 04/05-2016 16:09.
  */
 
-/*
- * tree module github: https://github.com/franck34/mongoose-tree
- *
- * GET /api/todo/
- * GET /api/todo/:id
- * POST /api/todo/
- * PUT /api/todo
- * DELETE /api/todo/
 
- * entry
- * GET /api/entry/
- * GET /api/entry/:id
- * POST /api/entry/
- * PUT /api/entry
- * POST /api/entry/:id -> Body -> archived: boolean
- * DELETE /api/entry/
-
- * localhost:3000/api/entry/25
- * body: archived = true
- */
 var passport = require('passport');
 var tokenCheck = require('../../libs/get-token').check;
 var Todo = require('../models/todo');
