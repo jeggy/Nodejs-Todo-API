@@ -17,7 +17,7 @@ module.exports = function(app) {
      *
      * @apiHeader {String} authorization Authorization value
      *
-     * @apiSuccess {Object[]} Todo[] all todos and todos childs.
+     * @apiSuccess {Todo} todo[] all todos and todos childs.
      *
      * @apiSuccessExample Success-Response:
      *   {
