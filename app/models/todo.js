@@ -48,6 +48,7 @@ TodoSchema.pre('save', function (next) {
     if(!self.isNew || !self.isModified('parent')) {
         next();
     }else if(self.parent){
+        // TODO: validate self.parent! IMPORTANT!
         mongoose.models["Todo"].findOne({ _id : mongoose.Types.ObjectId(self.parent) }, function(err, doc) {
             if(err){
                 next(err);
