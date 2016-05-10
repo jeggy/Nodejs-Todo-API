@@ -90,7 +90,7 @@ module.exports = function(app) {
             if(!err){
                 Todo.fetchTodos(user, function (err, data) {
                     if(!err){
-                        res.json(data);
+                        res.send({todos: data});
                     }
                 });
             }
