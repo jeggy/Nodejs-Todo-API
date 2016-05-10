@@ -98,23 +98,63 @@ module.exports = function(app) {
             }
         });
     });
-    
+
+    /**
+     * @api {post} /api/todo Post new Todo
+     * @apiVersion 1.0.0
+     * @apiName NewTodo
+     * @apiGroup Todo
+     *
+     * @apiHeader {String} authorization Authorization value
+     *
+     * @apiParam {String} title Title
+     * @apiParam {Date} [date] The date in ISO format (Ex: "2016-05-10T17:23:34.963Z")
+     * @apiParam {String} [root] Root id
+     * @apiParam {String} [parent] Parent id
+     *
+     * @apiSuccess {Todo} Returns the created Todo with all it's information.
+     *
+     * @apiSuccessExample Success-Response:
+     *  {
+     *    "__v": 0,
+     *    "title": "Buy new socks",
+     *    "owner": "57307aff57376d6e321da1f6",
+     *    "_id": "573216ee61c2cb6201cb2ad4",
+     *    "child": [],
+     *    "parent": "573216bc61c2cb6201cb2ad3",
+     *    "root": "5732165361c2cb6201cb2ad2",
+     *    "archived": false,
+     *    "date": "2015-05-10T13:42:33.659Z"
+     *  }
+     *
+     * @apiError MissingToken No token provided.
+     * @apiError WrongToken Token not matched on server.
+     * @apiError MissingTitle No title provided for new Todo.
+     *
+     */
     app.post('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
                 //
                 var title = req.body.title;
-                var date = req.body.date;
+                var date = new Date(req.body.date);
                 var root = req.body.root;
                 var parent = req.body.parent;
+
+                if(date == null){
+                    date = new Date();
+                }
 
                 var newTodo = new Todo({
                     title: title,
                     date: date,
-                    owner: user,
-                    root: root,
-                    parent: parent
+                    owner: user
                 });
+
+                newTodo.root = root == '' ? null : root;
+                newTodo.parent = parent == '' ? null : parent;
+
+
 
                 newTodo.save(function (err) {
                     if(err){
@@ -127,6 +167,33 @@ module.exports = function(app) {
         });
     });
 
+    /**
+     * @api {put} /api/todo Update existing todo
+     * @apiVersion 1.0.0
+     * @apiName UpdateTodo
+     * @apiGroup Todo
+     *
+     * @apiHeader {String} authorization Authorization value
+     *
+     * @apiParam {Number} id The id of the Todo you want to update.
+     * @apiParam {String} [title] Update the title
+     * @apiParam {String} [date] The date in ISO format (Ex: "2016-05-10T17:23:34.963Z")
+     * @apiParam {Boolean} [archived] Set the archived status
+     *
+     * @apiSuccess {Todo} Returns if anything got modified
+     *
+     * @apiSuccessExample Success-Response:
+     *  {
+     *      "ok": 1,
+     *      "nModified": 1,
+     *      "n": 1
+     *  }
+     *
+     * @apiError MissingToken No token provided.
+     * @apiError WrongToken Token not matched on server.
+     * @apiError MissingId No ID provided.
+     *
+     */
     app.put('/api/todo', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
@@ -143,6 +210,8 @@ module.exports = function(app) {
                     update.archived = req.body.archived;
                 }
 
+                // TODO: maybe add the posibility to update root/parent
+
                 Todo.update({_id: id, owner: user}, {$set: update}, {multi: false}, function (err, effected) {
                     if(effected.n == 1) {
                         res.send(effected);
@@ -154,10 +223,33 @@ module.exports = function(app) {
         })
     });
 
+    /**
+     * @api {delete} /api/todo/:id Remove Todo
+     * @apiVersion 1.0.0
+     * @apiName RemoveTodo
+     * @apiGroup Todo
+     *
+     * @apiHeader {String} authorization Authorization value
+     *
+     * @apiParam {Number} id The id of the Todo you want to remove.
+     *
+     * @apiSuccess {Number} ok The status of the executed query
+     * @apiSuccess {Number} n The number of Todo's removed
+     *
+     * @apiSuccessExample Success-Response:
+     *  {
+     *      "ok": 1,
+     *      "n": 2
+     *  }
+     *
+     * @apiError MissingToken No token provided.
+     * @apiError WrongToken Token not matched on server.
+     * @apiError MissingId No ID provided.
+     *
+     */
     app.delete('/api/todo/:id', passport.authenticate('jwt', { session: false}), function(req, res){
         tokenCheck(req, res, function (err, user) {
             if(!err){
-                console.log(req.params.id);
                 Todo.removeTodo(user, req.params.id, function (err, effected) {
                     if(err){
                         res.status(500).send(err);

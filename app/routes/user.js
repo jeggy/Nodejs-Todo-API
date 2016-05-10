@@ -19,7 +19,7 @@ module.exports = function(app) {
      * @apiParam {String} username Username
      * @apiParam {String} password Password
      * @apiParam {String} [fullname] Fullname
-     * @apiParam {Integer} [age] Age
+     * @apiParam {Number} [age] Age
      *
      * @apiSuccess {Boolean} success The success rate.
      * @apiSuccess {String} msg Information about what went wrong/right.
@@ -114,7 +114,7 @@ module.exports = function(app) {
      * @apiSuccess {String} _id Id for the logged in user.
      * @apiSuccess {String} username The username
      * @apiSuccess {String} [fullname] User's fullname
-     * @apiSuccess {Integer} [age] a The age of the user
+     * @apiSuccess {Number} [age] a The age of the user
      *
      * @apiSuccessExample Success-Response:
      *  {
