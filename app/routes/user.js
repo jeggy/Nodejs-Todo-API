@@ -109,7 +109,7 @@ module.exports = function(app) {
      * @apiName GetUserInfo
      * @apiGroup User
      *
-     * @apiHeader {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization token
      *
      * @apiSuccess {String} _id Id for the logged in user.
      * @apiSuccess {String} username The username

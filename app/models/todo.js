@@ -48,21 +48,24 @@ TodoSchema.pre('save', function (next) {
     if(!self.isNew || !self.isModified('parent')) {
         next();
     }else if(self.parent){
-        // TODO: validate self.parent! IMPORTANT!
-        mongoose.models["Todo"].findOne({ _id : mongoose.Types.ObjectId(self.parent) }, function(err, doc) {
-            if(err){
-                next(err);
-            }
-            doc.child.push(self._id);
-
-            doc.markModified('child');
-            doc.save(function (err, doc) {
-                if(err){
+        if(mongoose.Types.ObjectId.isValid(self.parent)) {
+            mongoose.models["Todo"].findOne({_id: mongoose.Types.ObjectId(self.parent)}, function (err, doc) {
+                if (err) {
                     next(err);
                 }
-                next();
+                doc.child.push(self._id);
+
+                doc.markModified('child');
+                doc.save(function (err, doc) {
+                    if (err) {
+                        next(err);
+                    }
+                    next();
+                });
             });
-        });
+        }else{
+            next({err: 'Not a valid parent id'});
+        }
     }else{
         next();
     }
