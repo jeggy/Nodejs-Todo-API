@@ -15,9 +15,9 @@ module.exports = function(app) {
      * @apiName GetTodos
      * @apiGroup Todo
      *
-     * @apiHeader {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization token
      *
-     * @apiSuccess {Todo} todo[] all todos and todos childs.
+     * @apiSuccess {Object[]} todos all todos and todos childs.
      *
      * @apiSuccessExample Success-Response:
      *   {
@@ -105,7 +105,7 @@ module.exports = function(app) {
      * @apiName NewTodo
      * @apiGroup Todo
      *
-     * @apiHeader {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization token
      *
      * @apiParam {String} title Title
      * @apiParam {Date} [date] The date in ISO format (Ex: "2016-05-10T17:23:34.963Z")
@@ -173,7 +173,7 @@ module.exports = function(app) {
      * @apiName UpdateTodo
      * @apiGroup Todo
      *
-     * @apiHeader {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization token
      *
      * @apiParam {Number} id The id of the Todo you want to update.
      * @apiParam {String} [title] Update the title
@@ -210,7 +210,7 @@ module.exports = function(app) {
                     update.archived = req.body.archived;
                 }
 
-                // TODO: maybe add the posibility to update root/parent
+                // TODO: maybe add the posibility to update root/parent?
 
                 Todo.update({_id: id, owner: user}, {$set: update}, {multi: false}, function (err, effected) {
                     if(effected.n == 1) {
@@ -229,7 +229,7 @@ module.exports = function(app) {
      * @apiName RemoveTodo
      * @apiGroup Todo
      *
-     * @apiHeader {String} authorization Authorization value
+     * @apiHeader {String} authorization Authorization token
      *
      * @apiParam {Number} id The id of the Todo you want to remove.
      *
