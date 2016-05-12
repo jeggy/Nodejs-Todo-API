@@ -127,9 +127,15 @@ TodoSchema.statics.fetchTodos = function(user, callback) {
         });
 
         docs.forEach(function (todo) {
+            todo = todo.toObject();
             if(todo.parent){
                 var parentChildsArray = map[todo.parent].child;
-                parentChildsArray.splice(parentChildsArray.indexOf(todo)-1, 1);
+                
+                for(var i = 0; i<parentChildsArray.length; i++){
+                    if(todo._id._id == parentChildsArray[i]._id){
+                        parentChildsArray.splice(i, 1);
+                    }
+                }
                 parentChildsArray.push(map[todo._id]);
             }else if(todo.root == null){
                 roots.push(map[todo._id]);
