@@ -8,11 +8,14 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var mongoose = require('mongoose');
 var app = express();
+var cors = require('cors');
 
 app.use(bodyParser.urlencoded({extended: false})); // JSON parsing
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(cors());
 
 // Mongo
 mongoose.connect(require('./config/config').mongoose.uri);
