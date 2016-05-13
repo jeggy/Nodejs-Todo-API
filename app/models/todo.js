@@ -99,7 +99,9 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
             roots.forEach(function (root) {
                 search(root);
             });
-
+            
+            
+            
             mongoose.models["Todo"].remove({_id: {$in: childs}}, function (err, effected) {
                 if(err){
                     callback(err, null);
