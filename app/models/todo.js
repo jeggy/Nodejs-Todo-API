@@ -77,8 +77,10 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
         if(err==null) {
 
             var stop = false;
+            var parentId = null;
             var search = function(current){
                 if(current._id == id && stop == false){
+                    parentId = current._id;
                     findChildsIDs(current);
                     stop = true;
                 }else {
@@ -100,7 +102,11 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
                 search(root);
             });
             
-            
+            if(parentId!=null){
+                mongoose.models["Todo"].remove({_id: parentId}, {$pull: {child: id}}, function (err, effected) {
+
+                })
+            }
             
             mongoose.models["Todo"].remove({_id: {$in: childs}}, function (err, effected) {
                 if(err){
