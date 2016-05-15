@@ -76,20 +76,7 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
     mongoose.models["Todo"].fetchTodos(user, function(err, roots){
         if(err==null) {
 
-            var stop = false;
-            var parentId = null;
-            var search = function(current){
-                if(current._id == id && stop == false){
-                    parentId = current._id;
-                    findChildsIDs(current);
-                    stop = true;
-                }else {
-                    current.child.forEach(function (child) {
-                        search(child)
-                    });
-                }
-            };
-
+            // Get all children's ID into an array
             var childs = [];
             var findChildsIDs = function (current) {
                 childs.push(current._id);
@@ -98,11 +85,28 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
                 });
             };
 
+            var parentId = null;
+            var stopSearch = false;
+            var search = function(current){
+                if(current._id == id && !stopSearch){
+                    parentId = current._id;
+                    findChildsIDs(current);
+                    stopSearch = true;
+                }else if(!stopSearch){
+                    current.child.forEach(function (child) {
+                        search(child)
+                    });
+                }
+            };
+
+
+            // Start recursive search for each root
             roots.forEach(function (root) {
                 search(root);
             });
-            
+
             if(parentId!=null){
+                console.log("Remove this from parent child array");
                 mongoose.models["Todo"].remove({_id: parentId, $isolated : 1}, {$pull: {child: id}}, function (err, effected) {
 
                 })
