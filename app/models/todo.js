@@ -103,12 +103,12 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
             });
             
             if(parentId!=null){
-                mongoose.models["Todo"].remove({_id: parentId}, {$pull: {child: id}}, function (err, effected) {
+                mongoose.models["Todo"].remove({_id: parentId, $isolated : 1}, {$pull: {child: id}}, function (err, effected) {
 
                 })
             }
             
-            mongoose.models["Todo"].remove({_id: {$in: childs}}, function (err, effected) {
+            mongoose.models["Todo"].remove({_id: {$in: childs}, $isolated : 1}, function (err, effected) {
                 if(err){
                     callback(err, null);
                 }else{
