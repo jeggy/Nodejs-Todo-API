@@ -89,7 +89,7 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
             var stopSearch = false;
             var search = function(current){
                 if(current._id == id && !stopSearch){
-                    parentId = current._id;
+                    parentId = current.parent;
                     findChildsIDs(current);
                     stopSearch = true;
                 }else if(!stopSearch){
@@ -106,9 +106,8 @@ TodoSchema.statics.removeTodo = function(user, id, callback){
             });
 
             if(parentId!=null){
-                console.log("Remove this from parent child array");
-                mongoose.models["Todo"].remove({_id: parentId, $isolated : 1}, {$pull: {child: id}}, function (err, effected) {
-
+                mongoose.models["Todo"].update({_id: parentId}, {$pull: {child: id}}, function (err, effected) {
+                    
                 })
             }
             
