@@ -1,8 +1,6 @@
 /**
  * Created by Jógvan on 02/05-2016 14:40.
  */
-
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
@@ -29,24 +27,20 @@ require('./libs/passport')(passport);
 // set routes
 require('./app/routes')(app);
 
-var Todo =require('./app/models/todo');
-// new Todo({
-//     title: "Child!",
-//     owner: "5729fec3b2102fdd1dd53a32",
-//     root: "572f6033c60ff4c4143e793b",
-//     parent: "572f6033c60ff4c4143e793b"
-// }).save();
-
-// var User = require('./app/models/user');
-// User.findOne({_id: "5729fec3b2102fdd1dd53a32"}, function (err, user) {
-//
-//     Todo.removeTest(user, "572f6033c60ff4c4143e793b", function (err, doc) {
-//         console.log(doc);
-//     });
-// });
 
 
 
-// Todo.fetchTodos();
+
+app.get('/auth/facebook', passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback', passport.authenticate('facebook'), function(req, res) {
+    // Successful authentication, redirect home.
+    res.send(req.user);
+});
+
+
+app.get('/a', function (req, res) {
+    res.send(req.user);
+});
 
 app.listen(3000);
