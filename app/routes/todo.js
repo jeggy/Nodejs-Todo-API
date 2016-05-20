@@ -141,7 +141,7 @@ module.exports = function(app) {
                 var root = req.body.root;
                 var parent = req.body.parent;
 
-                if(date == null){
+                if(date == null || typeof date === 'object'){
                     date = new Date();
                 }
 
