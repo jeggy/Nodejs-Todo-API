@@ -13,11 +13,11 @@ var UserSchema = new Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     fullname: String,
-    age: Number
+    age: Number,
+    facebookId: String
 });
 
 UserSchema.pre('save', function (next) {
@@ -27,13 +27,18 @@ UserSchema.pre('save', function (next) {
             if (err) {
                 return next(err);
             }
-            bcrypt.hash(user.password, salt, function (err, hash) {
-                if (err) {
-                    return next(err);
-                }
-                user.password = hash;
+            if(user.password) {
+                bcrypt.hash(user.password, salt, function (err, hash) {
+                    if (err) {
+                        return next(err);
+                    }
+                    user.password = hash;
+                    next();
+                });
+            }else{
+                // When facebook or other 3rd party login
                 next();
-            });
+            }
         });
     } else {
         return next();

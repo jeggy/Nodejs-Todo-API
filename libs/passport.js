@@ -2,7 +2,7 @@
  * Created by Jógvan on 04/05-2016 14:02.
  */
 var JwtStrategy = require('passport-jwt').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+var FacebookTokenStrategy = require('passport-facebook-token');
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jwt-simple');
 var config = require('../config/config');
@@ -30,16 +30,26 @@ module.exports = function (passport) {
         });
     }));
 
-    passport.use(new FacebookStrategy({
+    passport.use(new FacebookTokenStrategy({
             clientID: '1584843211828083',
-            clientSecret: '2032b359a3d2e5cee45ea7937acef208',
-            callbackURL: "http://localhost:3000/auth/facebook/callback"
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            console.log(accessToken);
-            console.log(refreshToken);
-            console.log(profile);
-            return cb(null, profile);
+            clientSecret: '2032b359a3d2e5cee45ea7937acef208'
+        }, function(accessToken, refreshToken, profile, done) {
+            User.findOne({facebookId: profile.id}, function (err, user) {
+                if(err){
+                    return done(err, null);
+                } else if(user){
+                    return done(null, user);
+                } else{
+                    var newUser = new User({
+                        username: profile._json.email ? profile._json.email : profile.id,
+                        fullname: profile._json.name,
+                        facebookId: profile.id
+                    });
+                    newUser.save(function (err) {
+                        return done(err, newUser);
+                    });
+                }
+            });
         }
     ));
 

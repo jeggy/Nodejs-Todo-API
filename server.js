@@ -31,16 +31,13 @@ require('./app/routes')(app);
 
 
 
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.post('/auth/facebook/token',
+    passport.authenticate(['facebook-token', 'jwt'], {session: false}),
+    function (req, res) {
+        // do something with req.user
+        res.send(req.user);
+    }
+);
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook'), function(req, res) {
-    // Successful authentication, redirect home.
-    res.send(req.user);
-});
-
-
-app.get('/a', function (req, res) {
-    res.send(req.user);
-});
 
 app.listen(3000);

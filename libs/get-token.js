@@ -20,14 +20,19 @@ module.exports = function (headers) {
 module.exports.check = function (req, res, cb){
     var token = require('./get-token')(req.headers);
     if (token) {
-        var user = jwt.decode(token, config.secret);
-        if (!user) {
-            var errmsg = {success: false, msg: 'Authentication failed. User not found.'};
-            cb(errmsg, null);
-            return res.status(401).send(errmsg);
-        } else {
-            // Success
-            cb(null, user);
+        if(req.headers.authorization.substr(0,3) == 'JWT') {
+            var user = jwt.decode(token, config.secret);
+            if (!user) {
+                var errmsg = {success: false, msg: 'Authentication failed. User not found.'};
+                cb(errmsg, null);
+                return res.status(401).send(errmsg);
+            } else {
+                // Success
+                cb(null, user);
+            }
+        }else{
+            // Facebook
+            cb(null, req.user);
         }
     } else {
         errmsg = {success: false, msg: 'No token provided.'};

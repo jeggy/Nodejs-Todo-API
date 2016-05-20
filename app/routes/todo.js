@@ -89,7 +89,7 @@ module.exports = function(app) {
      * @apiError WrongToken Token not matched on server.
      *
      */
-    app.get('/api/todo', passport.authenticate('jwt', {session: false}), function (req, res) {
+    app.get('/api/todo', passport.authenticate(['facebook-token', 'jwt'], {session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
             if (!err) {
                 Todo.fetchTodos(user, function (err, data) {
@@ -134,7 +134,7 @@ module.exports = function(app) {
      * @apiError MissingTitle No title provided for new Todo.
      *
      */
-    app.post('/api/todo', passport.authenticate('jwt', {session: false}), function (req, res) {
+    app.post('/api/todo', passport.authenticate(['facebook-token', 'jwt'], {session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
             if (!err) {
                 //
@@ -195,7 +195,7 @@ module.exports = function(app) {
      * @apiError MissingId No ID provided.
      *
      */
-    app.put('/api/todo', passport.authenticate('jwt', {session: false}), function (req, res) {
+    app.put('/api/todo', passport.authenticate(['facebook-token', 'jwt'], {session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
             if (!err) {
                 var id = req.body.id;
@@ -251,7 +251,7 @@ module.exports = function(app) {
      * @apiError MissingId No ID provided.
      *
      */
-    app.delete('/api/todo/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+    app.delete('/api/todo/:id', passport.authenticate(['facebook-token', 'jwt'], {session: false}), function (req, res) {
         tokenCheck(req, res, function (err, user) {
             if (!err) {
                 Todo.removeTodo(user, req.params.id, function (err, effected) {

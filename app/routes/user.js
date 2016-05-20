@@ -128,7 +128,7 @@ module.exports = function(app) {
     * @apiError WrongToken Authentication failed. User not found.
     *
     */
-    app.get('/api/user', passport.authenticate('jwt', { session: false}), function (req, res) {
+    app.get('/api/user', passport.authenticate(['facebook-token', 'jwt'], { session: false}), function (req, res) {
     tokenCheck(req, res, function (err, user) {
         User.findOne({_id: user._id}, {password: false, __v: false}, function (err, user) {
             res.send(user);
