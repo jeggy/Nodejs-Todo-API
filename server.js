@@ -1,6 +1,7 @@
 /**
- * Created by Jógvan on 02/05-2016 14:40.
+ * Created by Jógvan, Mik & Jan on 02/05-2016 14:40.
  */
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
@@ -34,7 +35,6 @@ require('./app/routes')(app);
 app.post('/auth/facebook/token',
     passport.authenticate(['facebook-token', 'jwt'], {session: false}),
     function (req, res) {
-        // do something with req.user
         res.send(req.user);
     }
 );

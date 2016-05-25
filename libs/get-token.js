@@ -1,5 +1,5 @@
 /**
- * Created by Jógvan on 04/05-2016 16:14.
+ * Created by Jógvan, Mik & Jan on 04/05-2016 16:14.
  */
 var jwt = require('jwt-simple');
 var config = require('../config/config');

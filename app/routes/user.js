@@ -1,5 +1,5 @@
 /**
- * Created by Jógvan on 02/05-2016 20:36.
+ * Created by Jógvan, Mik & Jan on 02/05-2016 20:36.
  */
 
 var router = require('express').Router();

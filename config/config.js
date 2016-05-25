@@ -1,5 +1,5 @@
 /**
- * Created by Jógvan on 02/05-2016 20:33.
+ * Created by Jógvan, Mik & Jan on 02/05-2016 20:33.
  */
 
 module.exports = {

@@ -1,5 +1,5 @@
 /**
- * Created by Jógvan on 04/05-2016 14:02.
+ * Created by Jógvan, Mik & Jan on 04/05-2016 14:02.
  */
 var JwtStrategy = require('passport-jwt').Strategy;
 var FacebookTokenStrategy = require('passport-facebook-token');
