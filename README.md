@@ -1,9 +1,14 @@
 # Nodejs Todo API
 
 ### Setup
-Install modules and setup api documentation on index:
+Install modules:
 ```
 npm install
+```
+
+##### Optional
+Setup API documentation on index:
+```
 npm install -g apidoc
 apidoc -i app/ -o apidoc/ -t apiTemplate/
 ```
