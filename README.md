@@ -1,12 +1,12 @@
 # Nodejs Todo API
 
-### Setup
+## Setup
 Install modules:
 ```
 npm install
 ```
 
-##### Optional
+#### Optional documentation setup
 Setup API documentation on index:
 ```
 npm install -g apidoc
@@ -15,7 +15,7 @@ apidoc -i app/ -o apidoc/ -t apiTemplate/
 sudo before `npm install -g apidoc`, if on Linux/Mac
 
 
-### Project's using this API
+## Project's using this API
 
 https://github.com/Wizzuriz/AngularJS_ToDo
 
