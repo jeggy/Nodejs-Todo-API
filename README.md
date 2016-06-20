@@ -1,10 +1,15 @@
 # Nodejs Todo API
 
 ## Setup
-Install modules:
 ```
+git clone https://github.com/jeggy/Nodejs-Todo-API.git
+cd Nodejs-Todo-API
 npm install
+node server.js
 ```
+
+You need to have mongodb up and running
+
 
 #### Optional documentation setup
 Setup API documentation on index:
