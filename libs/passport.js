@@ -17,15 +17,15 @@ module.exports = function (passport) {
         secretOrKey: config.secret,
         jwtFromRequest: ExtractJwt.fromAuthHeader()
     };
-    passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
+    passport.use(new JwtStrategy(opts, function (jwt_payload, next) {
         User.findOne({userName: jwt_payload.sub}, function (err, user) {
             if (err) {
-                return done(err, false);
+                return next(err, false);
             }
             if (user) {
-                done(null, user);
+                next(null, user);
             } else
-                done(null, false, 'User token not found');
+                next(null, false, 'User token not found');
         });
     }));
 
