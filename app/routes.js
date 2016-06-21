@@ -9,9 +9,9 @@ module.exports = function(app){
         'todo'
     ]
         .forEach(function (route) {
-        require('../routes/'+route)(app);
+        require('./routes/'+route)(app);
     });
-    
+
 };
 
 
