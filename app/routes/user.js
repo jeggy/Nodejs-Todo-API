@@ -36,23 +36,23 @@ module.exports = function(app) {
     *
     */
     app.post('/api/user/register', function(req, res) {
-    if (!req.body.username || !req.body.password) {
-        res.json({success: false, msg: 'Username and/or password is missing.'});
-    } else {
-        var newUser = new User({
-            username: req.body.username,
-            password: req.body.password,
-            fullname: req.body.fullname,
-            age: req.body.age
-        });
-        // save the user
-        newUser.save(function(err) {
-            if (err) {
-                return res.json({success: false, msg: 'Username already exists.'});
-            }
-            res.json({success: true, msg: 'Successfully created new user.'});
-        });
-    }
+        if (!req.body.username || !req.body.password) {
+            res.json({success: false, msg: 'Username and/or password is missing.'});
+        } else {
+            var newUser = new User({
+                username: req.body.username,
+                password: req.body.password,
+                fullname: req.body.fullname,
+                age: req.body.age
+            });
+            // save the user
+            newUser.save(function(err) {
+                if (err) {
+                    return res.json({success: false, msg: 'Username already exists.'});
+                }
+                res.json({success: true, msg: 'Successfully created new user.'});
+            });
+        }
     });
 
     /**
@@ -77,31 +77,31 @@ module.exports = function(app) {
     *
     */
     app.post('/api/user/login', function(req, res) {
-    if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')) {
-        User.findOne({username: req.body.username}, function (err, user) {
-            if (err) throw err;
+        if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')) {
+            User.findOne({username: req.body.username}, function (err, user) {
+                if (err) throw err;
 
-            var userErrMsg = {success: false, msg: 'Authentication failed. Wrong Username or Password'};
+                var userErrMsg = {success: false, msg: 'Authentication failed. Wrong Username or Password'};
 
-            if (!user) {
-                res.send(userErrMsg);
-            } else {
-                // check if password matches
-                user.comparePassword(req.body.password, function (err, isMatch) {
-                    if (isMatch && !err) {
-                        // if user is found and password is right create a token
-                        var token = jwt.encode(user, config.secret);
-                        // return the information including token as JSON
-                        res.json({success: true, token: 'JWT ' + token});
-                    } else {
-                        res.send(userErrMsg);
-                    }
-                });
-            }
-        });
-    }else{
-        res.send({success: false, msg: 'Authentication failed. Please specify a username and password in your http request body.'});
-    }
+                if (!user) {
+                    res.send(userErrMsg);
+                } else {
+                    // check if password matches
+                    user.comparePassword(req.body.password, function (err, isMatch) {
+                        if (isMatch && !err) {
+                            // if user is found and password is right create a token
+                            var token = jwt.encode(user, config.secret);
+                            // return the information including token as JSON
+                            res.json({success: true, token: 'JWT ' + token});
+                        } else {
+                            res.send(userErrMsg);
+                        }
+                    });
+                }
+            });
+        }else{
+            res.send({success: false, msg: 'Authentication failed. Please specify a username and password in your http request body.'});
+        }
     });
 
     /**

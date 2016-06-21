@@ -11,13 +11,12 @@ var User = require('../app/models/user');
 
 
 module.exports = function (passport) {
-    var opts = {};
 
-    opts.secretOrKey = config.secret;
-    // opts.issuer = config.issuer;
-    // opts.audience = config.audience;
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-
+    // From the JWT Strategy example: https://www.npmjs.com/package/passport-jwt
+    var opts = {
+        secretOrKey: config.secret,
+        jwtFromRequest: ExtractJwt.fromAuthHeader()
+    };
     passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
         User.findOne({userName: jwt_payload.sub}, function (err, user) {
             if (err) {
@@ -25,22 +24,30 @@ module.exports = function (passport) {
             }
             if (user) {
                 done(null, user);
-            }
-            else done(null, false, 'User token not found');
+            } else
+                done(null, false, 'User token not found');
         });
     }));
 
+    // Facebook Strategy
     passport.use(new FacebookTokenStrategy({
+            // Facebook todo api information
             clientID: '1584843211828083',
             clientSecret: '2032b359a3d2e5cee45ea7937acef208'
         }, function(accessToken, refreshToken, profile, done) {
+            // 'profile' is the facebook user object.
+            // Find user in DB from facebook id
             User.findOne({facebookId: profile.id}, function (err, user) {
                 if(err){
                     return done(err, null);
                 } else if(user){
+                    // if found return user
                     return done(null, user);
                 } else{
+                    // if user not found, create new user
+
                     var newUser = new User({
+                        // use email for username or facebook id if access to email wan't provided.
                         username: profile._json.email ? profile._json.email : profile.id,
                         fullname: profile._json.name,
                         facebookId: profile.id
@@ -52,6 +59,7 @@ module.exports = function (passport) {
             });
         }
     ));
+
 
     passport.serializeUser(function(user, cb) {
         cb(null, user);

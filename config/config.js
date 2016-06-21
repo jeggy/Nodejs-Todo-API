@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    "secret" : "aergreŋ®€ºDF¤",
+    "secret" : "aergreŋ®€ºDF¤", /* secret key for JWT authorization validation */
     "mongoose": {
         "uri": "mongodb://localhost:27017/todo"
     }
