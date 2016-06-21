@@ -134,8 +134,8 @@ TodoSchema.statics.fetchTodos = function(user, callback) {
         var map = {};
         var roots = [];
         docs.forEach(function (todo) {
-            map[todo._id] = todo.toObject();
             todo.child = [];
+            map[todo._id] = todo.toObject();
         });
 
         docs.forEach(function (todo) {
