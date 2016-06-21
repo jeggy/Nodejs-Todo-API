@@ -8,8 +8,7 @@ npm install
 node server.js
 ```
 
-You need to have mongodb up and running
-
+You need to have [Mongodb](https://www.mongodb.com/download-center#community) up and running 
 
 #### Optional documentation setup
 Setup API documentation on index:
