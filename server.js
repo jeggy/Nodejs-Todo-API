@@ -19,7 +19,7 @@ mongoose.connect(require('./config/config').mongoose.uri);
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // Add's "Access-Control-Allow-Origin: *" to every api response
 app.use(cors());

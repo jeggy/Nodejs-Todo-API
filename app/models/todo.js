@@ -59,8 +59,9 @@ TodoSchema.pre('save', function (next) {
                 doc.save(function (err, doc) {
                     if (err) {
                         next(err);
+                    }else {
+                        next();
                     }
-                    next();
                 });
             });
         }else{

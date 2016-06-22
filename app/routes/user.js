@@ -2,8 +2,6 @@
  * Created by Jógvan, Mik & Jan on 02/05-2016 20:36.
  */
 
-var router = require('express').Router();
-
 var jwt = require('jwt-simple');
 var passport = require('passport');
 var config = require('../../config/config');
@@ -77,7 +75,7 @@ module.exports = function(app) {
     *
     */
     app.post('/api/user/login', function(req, res) {
-        if(req.body.username && req.body.password) {
+        if(req.body.username != null && req.body.password != null) {
             User.findOne({username: req.body.username}, function (err, user) {
                 if (err) throw err;
 
@@ -129,11 +127,11 @@ module.exports = function(app) {
     *
     */
     app.get('/api/user', passport.authenticate(['facebook-token', 'jwt'], { session: false}), function (req, res) {
-    tokenCheck(req, res, function (err, user) {
-        User.findOne({_id: user._id}, {password: false, __v: false}, function (err, user) {
-            res.send(user);
+        tokenCheck(req, res, function (err, user) {
+            User.findOne({_id: user._id}, {password: false, __v: false}, function (err, user) {
+                res.send(user);
+            });
         });
-    });
     });
 
 };
