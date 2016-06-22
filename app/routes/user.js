@@ -77,7 +77,7 @@ module.exports = function(app) {
     *
     */
     app.post('/api/user/login', function(req, res) {
-        if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')) {
+        if(req.body.username && req.body.password) {
             User.findOne({username: req.body.username}, function (err, user) {
                 if (err) throw err;
 
