@@ -13,8 +13,8 @@ You need to have [Mongodb](https://www.mongodb.com/download-center#community) up
 #### Optional documentation setup
 Setup API documentation on index:
 ```
-npm install -g apidoc
-apidoc -i app/ -o apidoc/ -t apiTemplate/
+npm run docs
+
 ```
 sudo before `npm install -g apidoc`, if on Linux/Mac
 
